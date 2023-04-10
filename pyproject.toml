@@ -2,7 +2,7 @@
 name = "babyagi-streamlit"
 version = "1.0.0"
 description = ""
-authors = ["Dory <info@penguins-lab.com>"]
+authors = ["Kai"]
 
 [tool.poetry.dependencies]
 python = ">=3.10.9,<3.12"
