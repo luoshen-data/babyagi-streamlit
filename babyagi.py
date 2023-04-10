@@ -1,12 +1,13 @@
 from collections import deque
 from typing import Dict, List, Optional
 from langchain import LLMChain, OpenAI, PromptTemplate
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.embeddings import OpenAIEmbeddings
 from langchain.llms import BaseLLM
 from langchain.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStore
 from pydantic import BaseModel, Field
 import streamlit as st
+import os
 
 class TaskCreationChain(LLMChain):
     @classmethod
@@ -240,6 +241,8 @@ class BabyAGI(BaseModel):
         controller.add_task({"task_id": 1, "task_name": first_task})
         return controller
 
+if os.getenv("OPENAI_API_KEY"):
+    openai_api_key = os.getenv("OPENAI_API_KEY")
 
 def main():
     st.set_page_config(
@@ -257,8 +260,8 @@ def main():
     max_iterations = st.number_input("Max iterations", value=3, min_value=1, step=1)
     button = st.button("Run")
 
-    embedding_model = HuggingFaceEmbeddings()
-    vectorstore = FAISS.from_texts(["_"], embedding_model, metadatas=[{"task":first_task}])
+    embeddings = OpenAIEmbeddings()
+    vectorstore = FAISS.from_texts(["_"], embeddings, metadatas=[{"task":first_task}])
 
     if button:
         try:
